@@ -1,4 +1,5 @@
 require_relative 'Minesweeper'
+require 'YAML'
 
 class Game
   attr_reader :player, :board, :bomb_count
@@ -16,6 +17,7 @@ class Game
     puts "What's your name?"
     name = gets.chomp
     puts "Hey, #{name}. Are you ready??? to get?? owned??!?"
+    puts "If not, you can type 'exit' to save and exit"
     puts "You must find #{bomb_count} bombs"
     board.display
     until board.over?
@@ -52,7 +54,9 @@ class Game
     puts "What spot would you like to reveal????????? (row, col)"
     spot = nil
     until valid_spot?(spot)
-      spot = gets.chomp.split(", ").map(&:to_i)
+      response = gets.chomp
+      save if response == "exit"
+      spot = response.split(", ").map(&:to_i)
       puts "Please enter a valid spot" unless valid_spot?(spot)
     end
     spot
@@ -63,6 +67,7 @@ class Game
     mark = nil
     until valid_mark?(mark)
       mark = gets.chomp.downcase
+      save if mark == "exit"
       puts "Please type f, r, or u to flag, reveal, or unflag" unless valid_mark?(mark)
     end
     mark
@@ -76,8 +81,21 @@ class Game
   def valid_mark?(mark)
     !mark.nil? && (mark == "f" || mark == "r" )
   end
+
+  def save
+    puts "Name the file:"
+    filename = gets.chomp
+    File.write(filename, self.to_yaml)
+    Kernel.abort("Don't give up!")
+  end
+
+
 end
 
 if __FILE__ == $PROGRAM_NAME
-  Game.new.play
+  if ARGV[0]
+    YAML.load_file(ARGV.shift).play
+  else
+    Game.new.play
+  end
 end
