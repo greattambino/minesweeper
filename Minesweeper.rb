@@ -41,7 +41,7 @@ class Minesweeper
     end
   end
 
-  def neighbors?(pos)
+  def neighbors(pos)
     valid_positions = []
     deltas = [
       [ 0,  1],
@@ -66,7 +66,7 @@ class Minesweeper
   end
 
   def neighbors_bomb_count(pos)
-    check = neighbors?(pos)
+    check = neighbors(pos)
     nearby_bombs = 0
 
     check.each do |spot|

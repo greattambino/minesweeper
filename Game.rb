@@ -19,10 +19,17 @@ class Game
     board.display
     until board.over?
       puts "Moves taken: #{moves}"
-      get_move
+      turn = get_move
+
+      if turn.last == "f"
+        board.flag_bomb(turn.first)
+      else
+        board.reveal(turn.first)
+      end
+
       system("clear")
       board.display
-      moves += 1
+      self.moves += 1
     end
 
     if board.won?
@@ -33,8 +40,7 @@ class Game
   end
 
   def get_move
-    get_spot
-    get_mark
+    [get_spot, get_mark]
   end
 
   def get_spot
@@ -63,7 +69,7 @@ class Game
   end
 
   def valid_mark?(mark)
-    !mark.nil? && (mark.include?("f") || mark.include?("r"))
+    !mark.nil? && (mark == "f" || mark == "r" )
   end
 end
 
