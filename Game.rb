@@ -23,8 +23,10 @@ class Game
 
       if turn.last == "f"
         board.flag_bomb(turn.first)
-      else
+      elsif turn.last == "r"
         board.reveal(turn.first)
+      elsif turn.last == "u"
+        board.unflag_bomb(turn.first)
       end
 
       system("clear")
@@ -58,7 +60,7 @@ class Game
     mark = nil
     until valid_mark?(mark)
       mark = gets.chomp.downcase
-      puts "Please type f or r to flag or reveal" unless valid_mark?(mark)
+      puts "Please type f, r, or u to flag, reveal, or unflag" unless valid_mark?(mark)
     end
     mark
   end

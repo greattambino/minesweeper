@@ -1,4 +1,5 @@
 require 'byebug'
+require 'colorize'
 class Minesweeper
   attr_accessor :board
   attr_reader   :bombs, :flagged
@@ -20,7 +21,16 @@ class Minesweeper
   def display_row(row_num, array)
     print "#{row_num} "
     array.each do |elem|
-      print "#{elem}  "
+
+      if elem == "_"
+        print "#{elem}  "
+      elsif elem == "🚩"
+        print "#{elem}  "
+      elsif elem == 0
+        print "#{elem.to_s.colorize(:black)}  "
+      else
+        print "#{elem.to_s.colorize(:light_blue)}  "
+      end
     end
     print "\n"
   end
@@ -28,7 +38,7 @@ class Minesweeper
   def reveal(pos)
 
     if bombs.include?(pos)
-      self[pos] = "*"
+      self[pos] = "💥"
     else #reveal neighbors
       queue = [pos]
       until queue.empty?
@@ -93,8 +103,16 @@ class Minesweeper
   end
 
   def flag_bomb(pos)
-    self[pos] = "F"
-    flagged << pos
+    if self[pos] == "_"
+      self[pos] = "🚩"
+      flagged << pos
+    else
+      puts "You can't do that"
+    end
+  end
+
+  def unflag_bomb(pos)
+    self[pos] == "_" if self[pos] == "🚩"
   end
 
   def over?
@@ -102,7 +120,7 @@ class Minesweeper
   end
 
   def lost?
-    board.flatten.include?("*")
+    board.flatten.include?("💥")
   end
 
   def won?
