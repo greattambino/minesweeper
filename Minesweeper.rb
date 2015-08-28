@@ -1,3 +1,4 @@
+require 'byebug'
 class Minesweeper
   attr_accessor :board
   attr_reader   :bombs, :flagged
@@ -10,8 +11,8 @@ class Minesweeper
 
   def display
     puts "  0  1  2  3  4  5  6  7  8"
-    9.times do |idx|
-      display_row(idx, board[idx])
+    board.each_with_index do |row, idx|
+      display_row(idx, row)
     end
     "u suk"
   end
