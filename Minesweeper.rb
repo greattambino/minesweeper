@@ -8,6 +8,22 @@ class Minesweeper
     @flagged = []
   end
 
+  def display
+    puts "  0  1  2  3  4  5  6  7  8"
+    9.times do |idx|
+      display_row(idx, board[idx])
+    end
+    "u suk"
+  end
+
+  def display_row(row_num, array)
+    print "#{row_num} "
+    array.each do |elem|
+      print "#{elem}  "
+    end
+    print "\n"
+  end
+
   def reveal(pos)
 
     if bombs.include?(pos)
@@ -23,7 +39,7 @@ class Minesweeper
       end
     end
   end
-  
+
   def neighbors?(pos)
     valid_positions = []
     deltas = [
