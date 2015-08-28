@@ -33,9 +33,16 @@ class Minesweeper
       queue = [pos]
       until queue.empty?
         current_pos = queue.shift
-        self[current_pos] = neighbors_bomb_count(current_pos) if self[current_pos] == "_"
-        neighbors(pos).each do |spot|
-          queue << spot if neighbors_bomb_count(spot).zero?
+        bombs_found = neighbors_bomb_count(current_pos)
+        puts "Bombs Found: #{bombs_found}"
+
+        self[current_pos] = bombs_found if self[current_pos] == "_"
+
+        if bombs_found == 0
+          neighbors(current_pos).each do |spot|
+            puts "#{spot}"
+            queue << spot if self[spot] == "_"
+          end
         end
       end
     end
@@ -55,8 +62,8 @@ class Minesweeper
     ]
     row, col = pos
     deltas.each do |delta|
-      if row + delta.first > 0  && row + delta.last < 9 &&
-         col + delta.first  > 0 && col + delta.last < 9
+      if ((row + delta.first  >= 0)  && (row + delta.first < 9)) &&
+         ((col + delta.last  >= 0)  && (col + delta.last < 9))
 
         valid_positions << [row + delta.first, col + delta.last]
        end
@@ -74,7 +81,6 @@ class Minesweeper
     end
     nearby_bombs
   end
-
 
   def [](pos)
     row, col = pos
