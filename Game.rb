@@ -1,5 +1,6 @@
 require_relative 'Minesweeper'
 require 'YAML'
+require 'JSON'
 
 class Game
   attr_reader :player, :board, :bomb_count
@@ -9,13 +10,15 @@ class Game
     @bomb_count = bomb_count
     @board  = Minesweeper.new(board, bomb_count)
     @moves = 0
-    @name = name
+    @name = nil
     @flags_placed = 0
   end
 
   def play
-    puts "What's your name?"
-    name = gets.chomp
+    if name.nil?
+      puts "What's your name?"
+      name = gets.chomp
+    end
     puts "Hey, #{name}. Are you ready??? to get?? owned??!?"
     puts "If not, you can type 'exit' to save and exit"
     puts "You must find #{bomb_count} bombs"
