@@ -2,13 +2,14 @@ require_relative 'Minesweeper'
 
 class Game
   attr_reader :player, :board, :bomb_count
-  attr_accessor :moves, :name
+  attr_accessor :moves, :name, :flags_placed
 
   def initialize(board = Minesweeper.default_grid, bomb_count = 5)
     @bomb_count = bomb_count
     @board  = Minesweeper.new(board, bomb_count)
     @moves = 0
     @name = name
+    @flags_placed = 0
   end
 
   def play
@@ -18,15 +19,17 @@ class Game
     puts "You must find #{bomb_count} bombs"
     board.display
     until board.over?
-      puts "Moves taken: #{moves}"
+      puts "Moves taken: #{moves} \t Bombs remaining: #{bomb_count - flags_placed}"
       turn = get_move
 
       if turn.last == "f"
         board.flag_bomb(turn.first)
+        self.flags_placed += 1
       elsif turn.last == "r"
         board.reveal(turn.first)
       elsif turn.last == "u"
         board.unflag_bomb(turn.first)
+        self.flags_placed -= 1
       end
 
       system("clear")
