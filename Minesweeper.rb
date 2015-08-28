@@ -13,12 +13,17 @@ class Minesweeper
     if bombs.include?(pos)
       self[pos] = "*"
     else #reveal neighbors
-      neighbors(pos).each do |spot|
-        self[spot] = neighbors_bomb_count(spot) if self[spot] == "_"
+      queue = [pos]
+      until queue.empty?
+        current_pos = queue.shift
+        self[current_pos] = neighbors_bomb_count(current_pos) if self[current_pos] == "_"
+        neighbors(pos).each do |spot|
+          queue << spot if neighbors_bomb_count(spot).zero?
+        end
       end
     end
   end
-
+  
   def neighbors?(pos)
     valid_positions = []
     deltas = [
